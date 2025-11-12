@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<h:html xmlns:h="http://xmlns.jcp.org/jsf/html"
+        xmlns:f="http://xmlns.jcp.org/jsf/core"
+        xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Empleados</title>
+        <link rel="stylesheet" href="https://unpkg.com/primeflex@latest/primeflex.css"/>
+        <!--link rel="stylesheet" href="https://app.unpkg.com/primeflex@4.0.0/files/themes/primeone-light.css"/-->
+    </h:head>
+    <h:body>
+        <div class="card">
+            <h:form id="forma-empleados">
+                <p:growl id="mensajes" showDetails="true"/>
+                <!-- Menubar -->
+                <div class="card">
+                    <p:menubar>
+                        <p:menuitem value="Nuevo empleado" icon="pi pi-fw pi-plus"
+                                    actionListener="#{indexControlador.agregarEmpleado}"
+                                    update=":forma-modal:empleado-ventana"
+                                    oncomplete="PF('ventanaModalEmpleado').show()"/>
+                    </p:menubar>
+                </div>
+                <!-- DataTable   -->
+                <div class="card">
+                    <p:dataTable value="#{indexControlador.empleados}" var="empleado"
+                                 id="empleados-data-table" widgetVar="empleadosDataTable">
+                        <p:column headerText="Id">
+                            <h:outputText value="#{empleado.id}"/>
+                        </p:column>
+
+                        <p:column headerText="Nombre">
+                            <h:outputText value="#{empleado.nombre}"/>
+                        </p:column>
+
+                        <p:column headerText="Apellido">
+                            <h:outputText value="#{empleado.apellido}"/>
+                        </p:column>
+
+                        <p:column headerText="Correo">
+                            <h:outputText value="#{empleado.correo}"/>
+                        </p:column>
+
+                        <p:column headerText="Edad">
+                            <h:outputText value="#{empleado.edad}"/>
+                        </p:column>
+
+                        <p:column headerText="Genero">
+                            <h:outputText value="#{empleado.genero}"/>
+                        </p:column>
+                    </p:dataTable>
+                </div>
+            </h:form>
+            <h:form id="forma-modal">
+                <p:dialog header="Empleado" showEffect="fade"
+                          modal="true" widgetVar="ventanaModalEmpleado"
+                          responsive="true">
+                    <p:outputPanel id="empleado-ventana" class="ui-fluid">
+                        <div class="field">
+                            <p:outputLabel for="nombre">Nombre: </p:outputLabel>
+                            <p:inputText id="nombre" value="#{indexControlador.empleadoSeleccionado.nombre}"/>
+                        </div>
+                        <div class="field">
+                            <p:outputLabel for="apellido">Apellido: </p:outputLabel>
+                            <p:inputText id="apellido" value="#{indexControlador.empleadoSeleccionado.apellido}"/>
+                        </div>
+                        <div class="field">
+                            <p:outputLabel for="correo">Correo: </p:outputLabel>
+                            <p:inputText id="correo" value="#{indexControlador.empleadoSeleccionado.correo}"/>
+                        </div>
+                        <div class="field">
+                            <p:outputLabel for="edad">Edad: </p:outputLabel>
+                            <p:inputText id="edad" value="#{indexControlador.empleadoSeleccionado.edad}"/>
+                        </div>
+                        <div class="field">
+                            <p:outputLabel for="genero">Genero: </p:outputLabel>
+                            <p:inputText id="genero" value="#{indexControlador.empleadoSeleccionado.genero}"/>
+                        </div>
+                    </p:outputPanel>
+                    <f:facet name="footer">
+                        <p:commandButton value="Guardar" icon="pi pi-check"
+                                         process="empleado-ventana @this"
+                                         actionListener="#{indexControlador.guardarEmpleado}"/>
+                        <p:commandButton value="Cancelar" icon="pi pi-times"
+                                         onclick="PF('ventanaModalEmpleado').hide()"
+                                         class="ui-button-secondary" type="button"/>
+                    </f:facet>
+                </p:dialog>
+            </h:form>
+        </div>
+    </h:body>
+</h:html>
