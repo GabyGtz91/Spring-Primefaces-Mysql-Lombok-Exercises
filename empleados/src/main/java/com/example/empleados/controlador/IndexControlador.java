@@ -7,12 +7,16 @@ import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
 import jakarta.faces.view.ViewScoped;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 import org.primefaces.PrimeFaces;
+import org.primefaces.event.SelectEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.logging.Logger;
 
+@Slf4j
 @Component
 @Data
 @ViewScoped
@@ -38,8 +42,11 @@ public class IndexControlador { //Controlador de la vista
     public void guardarEmpleado(){
         if(this.empleadoSeleccionado.getId() == null) {
             this.empleadoServicio.guardarEmpleado(this.empleadoSeleccionado);
-            this.empleados.add(empleadoSeleccionado);
+            this.empleados.add(this.empleadoSeleccionado);
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Empleado Agregado"));
+        } else {
+            this.empleadoServicio.guardarEmpleado(this.empleadoSeleccionado);
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Empleado Actualizado"));
         }
 
         //Ocultar la ventana modal
@@ -48,5 +55,11 @@ public class IndexControlador { //Controlador de la vista
         PrimeFaces.current().ajax().update("forma-empleados:mensajes", "forma-empleados:empleados-data-table");
         //Reset del objeto clientes seleccionado
         this.empleadoSeleccionado = null;
+    }
+
+    public void seleccionarEmpleado(SelectEvent<Empleado> event) {
+        this.empleadoSeleccionado = event.getObject();
+        //System.out.println("Empleado seleccionado: " + empleadoSeleccionado.getId());
+        log.info("Empleado seleccionado: ", empleadoSeleccionado.getId());
     }
 }

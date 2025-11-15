@@ -4,8 +4,9 @@
         xmlns:p="http://primefaces.org/ui">
     <h:head>
         <title>Empleados</title>
-        <link rel="stylesheet" href="https://unpkg.com/primeflex@latest/primeflex.css"/>
+        <!--link rel="stylesheet" href="https://unpkg.com/primeflex@latest/primeflex.css"/-->
         <!--link rel="stylesheet" href="https://app.unpkg.com/primeflex@4.0.0/files/themes/primeone-light.css"/-->
+        <h:outputStylesheet library="css" name="estilos.css" />
     </h:head>
     <h:body>
         <div class="card">
@@ -18,12 +19,21 @@
                                     actionListener="#{indexControlador.agregarEmpleado}"
                                     update=":forma-modal:empleado-ventana"
                                     oncomplete="PF('ventanaModalEmpleado').show()"/>
+                        <p:menuitem value="Editar empleado"
+                                    update=":forma-modal:empleado-ventana"
+                                    oncomplete="PF('ventanaModalEmpleado').show()" />
                     </p:menubar>
                 </div>
                 <!-- DataTable   -->
                 <div class="card">
                     <p:dataTable value="#{indexControlador.empleados}" var="empleado"
+                                 selectionMode="single" selection="#{indexControlador.empleadoSeleccionado}"
+                                 rowKey="#{empleado.id}"
                                  id="empleados-data-table" widgetVar="empleadosDataTable">
+
+                        <p:ajax event="rowSelect"
+                                listener="#{indexControlador.seleccionarEmpleado}"/>
+
                         <p:column headerText="Id">
                             <h:outputText value="#{empleado.id}"/>
                         </p:column>
