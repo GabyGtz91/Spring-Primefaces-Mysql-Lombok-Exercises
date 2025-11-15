@@ -53,13 +53,25 @@ public class IndexControlador { //Controlador de la vista
         PrimeFaces.current().executeScript("PF('ventanaModalEmpleado').hide()");
         //Actualizar la tabla usando ajax
         PrimeFaces.current().ajax().update("forma-empleados:mensajes", "forma-empleados:empleados-data-table");
-        //Reset del objeto clientes seleccionado
+        //Reset del objeto empleado seleccionado
         this.empleadoSeleccionado = null;
     }
 
     public void seleccionarEmpleado(SelectEvent<Empleado> event) {
         this.empleadoSeleccionado = event.getObject();
         //System.out.println("Empleado seleccionado: " + empleadoSeleccionado.getId());
-        log.info("Empleado seleccionado: ", empleadoSeleccionado.getId());
+        log.info("Empleado seleccionado: ", this.empleadoSeleccionado.getId());
+    }
+
+    public void eliminarEmpleado() {
+        if(this.empleadoSeleccionado.getId() != null) {
+            this.empleadoServicio.eliminarEmpleado(this.empleadoSeleccionado);
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Empleado Eliminado"));
+            this.empleados.remove(this.empleadoSeleccionado);
+            //Actualizar la tabla usando ajax
+            PrimeFaces.current().ajax().update("forma-empleados:mensajes", "forma-empleados:empleados-data-table");
+            //Reset del objeto empleado seleccionado
+            this.empleadoSeleccionado = null;
+        }
     }
 }
