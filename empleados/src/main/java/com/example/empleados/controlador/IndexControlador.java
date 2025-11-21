@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.logging.Logger;
 
 @Slf4j
 @Component
@@ -36,7 +35,7 @@ public class IndexControlador { //Controlador de la vista
     }
 
     public void agregarEmpleado() {
-        empleadoSeleccionado = new Empleado();
+        this.empleadoSeleccionado = new Empleado();
     }
 
     public void guardarEmpleado(){

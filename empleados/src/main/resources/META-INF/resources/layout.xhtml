@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<h:html xmlns:h="http://xmlns.jcp.org/jsf/html"
+        xmlns:p="http://primefaces.org/ui"
+        xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+    <h:head>
+        <title>Sistema Empleados</title>
+        <!--link rel="stylesheet" href="https://unpkg.com/primeflex@latest/primeflex.css"/-->
+        <!--link rel="stylesheet" href="https://app.unpkg.com/primeflex@4.0.0/files/themes/primeone-light.css"/-->
+        <h:outputStylesheet library="css" name="estilos.css" />
+    </h:head>
+
+    <h:body>
+
+        <!-- Menú superior -->
+        <h:form id="menuFrm">
+
+            <p:growl id="growl"
+                     showDetail="true"
+                     showSummary="false"
+                     showIcon="true"/>
+
+            <p:messages id="message"
+                        showDetail="true"
+                        showSummary="false"
+                        showIcon="true"
+                        closable="true"/>
+
+            <p:menubar hideDelay="1000">
+                <p:submenu label="Empleados" icon="pi pi-fw pi-user">
+                    <p:menuitem value="Lista de empleados" icon="pi pi-fw pi-users"
+                                outcome="empleados"/>
+                </p:submenu>
+            </p:menubar>
+
+        </h:form>
+
+        <h:panelGroup id="content"
+                      layout="block"
+                      style="margin-top: 20px">
+            <ui:insert name="content"/>
+            <!--<ui:fragment rendered="#{menuOA.vista ne null and menuOA.vista ne ''}">
+                <ui:include src="#{menuOA.vista}"/>
+            </ui:fragment>-->
+        </h:panelGroup>
+
+        <style>
+            .panel-izq .ui-panel-titlebar{
+                text-align: left !important;
+            }
+            .panel-izq .ui-panel-title{
+                float: left !important;
+            }
+        </style>
+
+    </h:body>
+
+</h:html>
