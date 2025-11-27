@@ -1,10 +1,9 @@
 package com.example.empleados.modelo;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.Date;
 
 @Entity
 @Data
@@ -19,6 +18,16 @@ public class Empleado {
     private String nombre;
     private String apellido;
     private String correo;
-    private Integer edad;
-    private String genero;
+    //private Integer edad;
+    private Character genero;
+    private String telefono;
+    private Date fechaNacimiento;
+    private String direccion;
+
+
+    @Transient
+    public String getGeneroDesc() {
+        if (genero == null) return "";
+        return genero == 'M' ? "Masculino" : "Femenino";
+    }
 }
