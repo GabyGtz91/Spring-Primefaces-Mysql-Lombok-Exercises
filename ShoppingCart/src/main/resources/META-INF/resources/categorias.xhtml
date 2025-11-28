@@ -1,0 +1,86 @@
+<ui:composition template="/layout.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+    <ui:define name="content">
+        <h:form id="categoriasFrm">
+            <p:growl id="mensajes" showDetails="true"/>
+            <!-- DataTable   -->
+            <div class="card">
+                <p:toolbar id="tool-bar">
+                    <p:toolbarGroup>
+                        <p:commandButton value="Agregar" icon="pi pi-plus" actionListener="#{categoriaControlador.agregarCategoria}"
+                                         update=":forma-modal:categoriaPnl" oncomplete="PF('categoriaDlg').show()"
+                                         styleClass="ui-button-success" style="margin-right: .5rem">
+                        </p:commandButton>
+                        <p:commandButton value="Editar"  icon="pi pi-pencil" update=":forma-modal:categoriaPnl"
+                                         disabled="#{empty categoriaControlador.categoriaSeleccionada}"
+                                         oncomplete="PF('categoriaDlg').show()"
+                                         styleClass="ui-button-info" style="margin-right: .5rem">
+                        </p:commandButton>
+                        <p:commandButton value="Eliminar"
+                                         icon="pi pi-trash"
+                                         process="@this"
+                                         disabled="#{empty categoriaControlador.categoriaSeleccionada}"
+                                         update=":forma-modal:eliminarCategoriaDlg"
+                                         oncomplete="PF('eliminarCategoriaDlg').show()"
+                                         styleClass="ui-button-danger" style="margin-right: .5rem">
+                        </p:commandButton>
+                    </p:toolbarGroup>
+                </p:toolbar>
+                <p:dataTable value="#{categoriaControlador.categorias}" var="categoria"
+                             selectionMode="single" selection="#{categoriaControlador.categoriaSeleccionada}"
+                             rowKey="#{categoria.id}"
+                             id="categorias-data-table" widgetVar="categoriaDataTable">
+
+                    <p:ajax event="rowSelect" listener="#{categoriaControlador.seleccionarCategoria}"
+                            update=":categoriasFrm:tool-bar"/>
+
+                    <p:column headerText="Id">
+                        <h:outputText value="#{categoria.id}"/>
+                    </p:column>
+
+                    <p:column headerText="Nombre">
+                        <h:outputText value="#{categoria.nombre}"/>
+                    </p:column>
+                </p:dataTable>
+            </div>
+        </h:form>
+        <h:form id="forma-modal">
+            <p:dialog header="Categoria" showEffect="fade"
+                      modal="true" widgetVar="categoriaDlg"
+                      responsive="true">
+                <p:outputPanel id="categoriaPnl" class="ui-fluid">
+                    <div class="field">
+                        <p:outputLabel for="nombre">Nombre: </p:outputLabel>
+                        <p:inputText id="nombre" value="#{categoriaControlador.categoriaSeleccionada.nombre}"/>
+                    </div>
+                </p:outputPanel>
+                <f:facet name="footer">
+                    <p:commandButton value="Guardar" icon="pi pi-check"
+                                     process="categoriaPnl @this"
+                                     actionListener="#{categoriaControlador.guardarCategoria}"/>
+                    <p:commandButton value="Cancelar" icon="pi pi-times"
+                                     onclick="PF('categoriaDlg').hide()"
+                                     class="ui-button-secondary" type="button"/>
+                </f:facet>
+            </p:dialog>
+            <p:confirmDialog widgetVar="eliminarCategoriaDlg"
+                             id="eliminarCategoriaDlg"
+                             showEffect="fade" width="300"
+                             message="Esta seguro de eliminar la categoria?"
+                             header="Confirmar" severity="warn">
+                <p:commandButton value="Si" icon="pi pi-check"
+                                 process="@this"
+                                 actionListener="#{categoriaControlador.eliminarCategoria}"
+                                 oncomplete="PF('eliminarCategoriaDlg').hide()"/>
+                <p:commandButton value="No" type="button"
+                                 styleClass="ui-button-secondary"
+                                 icon="pi pi-times"
+                                 onclick="PF('eliminarCategoriaDlg').hide()"/>
+            </p:confirmDialog>
+        </h:form>
+    </ui:define>
+</ui:composition>
