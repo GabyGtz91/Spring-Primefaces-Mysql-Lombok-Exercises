@@ -11,14 +11,21 @@
             <div class="card">
                 <p:toolbar id="tool-bar">
                     <p:toolbarGroup>
-                        <p:commandButton value="Agregar" icon="pi pi-plus" actionListener="#{categoriaControlador.agregarCategoria}"
-                                         update=":forma-modal:categoriaPnl" oncomplete="PF('categoriaDlg').show()"
-                                         styleClass="ui-button-success" style="margin-right: .5rem">
+                        <p:commandButton value="Agregar"
+                                         icon="pi pi-plus"
+                                         actionListener="#{categoriaControlador.agregarCategoria}"
+                                         update=":forma-modal:categoriaPnl"
+                                         oncomplete="PF('categoriaDlg').show()"
+                                         styleClass="ui-button-success"
+                                         style="margin-right: .5rem">
                         </p:commandButton>
-                        <p:commandButton value="Editar"  icon="pi pi-pencil" update=":forma-modal:categoriaPnl"
+                        <p:commandButton value="Editar"
+                                         icon="pi pi-pencil"
+                                         update=":forma-modal:categoriaPnl"
                                          disabled="#{empty categoriaControlador.categoriaSeleccionada}"
                                          oncomplete="PF('categoriaDlg').show()"
-                                         styleClass="ui-button-info" style="margin-right: .5rem">
+                                         styleClass="ui-button-info"
+                                         style="margin-right: .5rem">
                         </p:commandButton>
                         <p:commandButton value="Eliminar"
                                          icon="pi pi-trash"
@@ -26,14 +33,20 @@
                                          disabled="#{empty categoriaControlador.categoriaSeleccionada}"
                                          update=":forma-modal:eliminarCategoriaDlg"
                                          oncomplete="PF('eliminarCategoriaDlg').show()"
-                                         styleClass="ui-button-danger" style="margin-right: .5rem">
+                                         styleClass="ui-button-danger"
+                                         style="margin-right: .5rem">
                         </p:commandButton>
                     </p:toolbarGroup>
                 </p:toolbar>
-                <p:dataTable value="#{categoriaControlador.categorias}" var="categoria"
-                             selectionMode="single" selection="#{categoriaControlador.categoriaSeleccionada}"
+                <p:dataTable value="#{categoriaControlador.categorias}"
+                             var="categoria"
+                             selectionMode="single"
+                             selection="#{categoriaControlador.categoriaSeleccionada}"
                              rowKey="#{categoria.id}"
-                             id="categorias-data-table" widgetVar="categoriaDataTable">
+                             paginator="true"
+                             rows="10"
+                             id="categorias-data-table"
+                             widgetVar="categoriaDataTable">
 
                     <p:ajax event="rowSelect" listener="#{categoriaControlador.seleccionarCategoria}"
                             update=":categoriasFrm:tool-bar"/>

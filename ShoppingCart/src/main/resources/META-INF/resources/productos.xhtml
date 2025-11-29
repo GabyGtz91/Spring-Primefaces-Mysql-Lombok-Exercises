@@ -11,20 +11,49 @@
             <div class="card">
                 <p:toolbar id="tool-bar">
                     <p:toolbarGroup>
-                        <p:commandButton value="Agregar" icon="pi pi-plus" actionListener="#{productoControlador.agregarProducto}"
-                                         update=":forma-modal:productoPnl" oncomplete="PF('productoDlg').show()"
-                                         styleClass="ui-button-success" style="margin-right: .5rem">
+                        <p:commandButton value="Agregar"
+                                         icon="pi pi-plus"
+                                         actionListener="#{productoControlador.agregarProducto}"
+                                         update=":forma-modal:productoPnl"
+                                         oncomplete="PF('productoDlg').show()"
+                                         styleClass="ui-button-success"
+                                         style="margin-right: .5rem">
+                        </p:commandButton>
+                        <p:commandButton value="Editar"
+                                         icon="pi pi-pencil"
+                                         update=":forma-modal:productoPnl"
+                                         disabled="#{empty productoControlador.productoSeleccionado}"
+                                         oncomplete="PF('productoDlg').show()"
+                                         styleClass="ui-button-info"
+                                         style="margin-right: .5rem">
+                        </p:commandButton>
+                        <p:commandButton value="Eliminar"
+                                         icon="pi pi-trash"
+                                         process="@this"
+                                         disabled="#{empty productoControlador.productoSeleccionado}"
+                                         update=":forma-modal:eliminarProductoDlg"
+                                         oncomplete="PF('eliminarProductoDlg').show()"
+                                         styleClass="ui-button-danger" style="margin-right: .5rem">
                         </p:commandButton>
                     </p:toolbarGroup>
                 </p:toolbar>
-                <p:dataTable value="#{productoControlador.productos}" var="producto"
-                             selectionMode="single" selection="#{productoControlador.productoSeleccionado}"
+                <p:dataTable value="#{productoControlador.productos}"
+                             var="producto"
+                             selectionMode="single"
+                             selection="#{productoControlador.productoSeleccionado}"
                              rowKey="#{producto.id}"
-                             id="productos-data-table" widgetVar="productoDataTable">
-                    <p:column headerText="Id">
+                             id="productos-data-table"
+                             paginator="true"
+                             rows="10"
+                             widgetVar="productoDataTable">
+
+                    <p:ajax event="rowSelect" listener="#{productoControlador.seleccionarProducto}"
+                            update=":productosFrm:tool-bar"/>
+
+                    <p:column headerText="Id" filterBy="#{producto.id}"  filterMatchMode="contains">
                         <h:outputText value="#{producto.id}"/>
                     </p:column>
-                    <p:column headerText="Nombre">
+                    <p:column headerText="Nombre" filterBy="#{producto.nombre}" filterMatchMode="contains">
                         <h:outputText value="#{producto.nombre}"/>
                     </p:column>
                     <p:column headerText="Precio">
@@ -51,19 +80,36 @@
                     </div>
                     <div class="field">
                         <p:outputLabel for="categoria">Categoria: </p:outputLabel>
-                        <p:selectOneMenu id="categoria" value="#{productoControlador.categorias}">
-                            <f:selectItem itemLabel="Selecciona la categoria" itemValue=""/>
+                        <p:selectOneMenu id="categoria" value="#{productoControlador.productoSeleccionado.categoria.id}">
+                            <f:selectItem itemLabel="Selecciona la categoria" itemValue="#{null}" noSelectionOption="true"/>
                             <f:selectItems value="#{productoControlador.categorias}" var="cat"
-                                           itemLabel="#{cat.nombre}" itemValue="#{cat}"/>
+                                           itemLabel="#{cat.nombre}" itemValue="#{cat.id}"/>
                         </p:selectOneMenu>
                     </div>
                 </p:outputPanel>
                 <f:facet name="footer">
+                    <p:commandButton value="Guardar" icon="pi pi-check"
+                                     process="productoPnl @this"
+                                     actionListener="#{productoControlador.guardarProducto}"/>
                     <p:commandButton value="Cancelar" icon="pi pi-times"
                                      onclick="PF('productoDlg').hide()"
                                      class="ui-button-secondary" type="button"/>
                 </f:facet>
             </p:dialog>
+            <p:confirmDialog widgetVar="eliminarProductoDlg"
+                             id="eliminarProductoDlg"
+                             showEffect="fade" width="300"
+                             message="Esta seguro de eliminar el producto?"
+                             header="Confirmar" severity="warn">
+                <p:commandButton value="Si" icon="pi pi-check"
+                                 process="@this"
+                                 actionListener="#{productoControlador.eliminarProducto}"
+                                 oncomplete="PF('eliminarProductoDlg').hide()"/>
+                <p:commandButton value="No" type="button"
+                                 styleClass="ui-button-secondary"
+                                 icon="pi pi-times"
+                                 onclick="PF('eliminarProductoDlg').hide()"/>
+            </p:confirmDialog>
         </h:form>
     </ui:define>
 </ui:composition>
