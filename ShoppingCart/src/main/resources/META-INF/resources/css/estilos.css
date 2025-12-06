@@ -1,0 +1,79 @@
+/* Fondo general suave */
+body {
+    background: #f4f6f9;
+    font-family: "Segoe UI", Roboto, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+/* Quitar bordes a panel */
+.ui-panel {
+    border: none !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    border-radius: 10px;
+    background: white !important;
+}
+
+/* Barra superior del panel */
+.ui-panel-titlebar {
+    background: linear-gradient(45deg, #2c6bed, #6aa9ff) !important;
+    color: white !important;
+    border: none !important;
+    border-radius: 10px 10px 0 0 !important;
+    padding: 12px !important;
+}
+
+/* Título del panel */
+.ui-panel-title {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+/* TabMenu estilo moderno */
+.ui-tabmenu {
+    background: transparent !important;
+    border: none !important;
+    margin-top: 15px;
+}
+
+.ui-tabmenu-nav {
+    border: none !important;
+    background: transparent !important;
+}
+
+.ui-tabmenuitem {
+    border: none !important;
+    margin-right: 15px;
+}
+
+.ui-tabmenuitem .ui-menuitem-link {
+    background: #e9eef5;
+    color: #2c3e50 !important;
+    border-radius: 20px;
+    padding: 8px 18px !important;
+    border: none !important;
+    transition: 0.3s;
+}
+
+.ui-tabmenuitem .ui-menuitem-link:hover {
+    background: #d4e0f7 !important;
+}
+
+.ui-tabmenuitem.ui-state-active .ui-menuitem-link {
+    background: #2c6bed !important;
+    color: white !important;
+    font-weight: bold;
+}
+
+/* Creación de espacio visual */
+#content {
+    max-width: 500px;
+    margin: 40px auto;
+    padding: 20px;
+}
+
+/* Growl y messages */
+.ui-growl {
+    margin-top: 20px;
+}
+

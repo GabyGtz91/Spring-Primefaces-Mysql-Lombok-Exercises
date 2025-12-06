@@ -1,7 +1,6 @@
 package com.shoppingcart.ShoppingCart.servicio;
 
 import com.shoppingcart.ShoppingCart.modelo.Producto;
-import com.shoppingcart.ShoppingCart.repositorio.CategoriaRepositorio;
 import com.shoppingcart.ShoppingCart.repositorio.ProductoRepositorio;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

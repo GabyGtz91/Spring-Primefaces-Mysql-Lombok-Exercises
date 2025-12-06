@@ -1,4 +1,4 @@
-<ui:composition template="/layout.xhtml"
+<ui:composition template="/layout2.xhtml"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:p="http://primefaces.org/ui"
@@ -13,7 +13,7 @@
                     <p:toolbarGroup>
                         <p:commandButton value="Agregar"
                                          icon="pi pi-plus"
-                                         actionListener="#{productoControlador.agregarProducto}"
+                                         actionListener="#{productoOA.agregarProducto}"
                                          update=":forma-modal:productoPnl"
                                          oncomplete="PF('productoDlg').show()"
                                          styleClass="ui-button-success"
@@ -22,7 +22,7 @@
                         <p:commandButton value="Editar"
                                          icon="pi pi-pencil"
                                          update=":forma-modal:productoPnl"
-                                         disabled="#{empty productoControlador.productoSeleccionado}"
+                                         disabled="#{empty productoOA.productoSeleccionado}"
                                          oncomplete="PF('productoDlg').show()"
                                          styleClass="ui-button-info"
                                          style="margin-right: .5rem">
@@ -30,24 +30,24 @@
                         <p:commandButton value="Eliminar"
                                          icon="pi pi-trash"
                                          process="@this"
-                                         disabled="#{empty productoControlador.productoSeleccionado}"
+                                         disabled="#{empty productoOA.productoSeleccionado}"
                                          update=":forma-modal:eliminarProductoDlg"
                                          oncomplete="PF('eliminarProductoDlg').show()"
                                          styleClass="ui-button-danger" style="margin-right: .5rem">
                         </p:commandButton>
                     </p:toolbarGroup>
                 </p:toolbar>
-                <p:dataTable value="#{productoControlador.productos}"
+                <p:dataTable value="#{productoOA.productos}"
                              var="producto"
                              selectionMode="single"
-                             selection="#{productoControlador.productoSeleccionado}"
+                             selection="#{productoOA.productoSeleccionado}"
                              rowKey="#{producto.id}"
                              id="productos-data-table"
                              paginator="true"
                              rows="10"
                              widgetVar="productoDataTable">
 
-                    <p:ajax event="rowSelect" listener="#{productoControlador.seleccionarProducto}"
+                    <p:ajax event="rowSelect" listener="#{productoOA.seleccionarProducto}"
                             update=":productosFrm:tool-bar"/>
 
                     <p:column headerText="Id" filterBy="#{producto.id}"  filterMatchMode="contains">
@@ -56,7 +56,7 @@
                     <p:column headerText="Nombre" filterBy="#{producto.nombre}" filterMatchMode="contains">
                         <h:outputText value="#{producto.nombre}"/>
                     </p:column>
-                    <p:column headerText="Precio">
+                    <p:column headerText="Precio" sortBy="#{producto.precio}">
                         <h:outputText value="#{producto.precio}"/>
                     </p:column>
                     <p:column headerText="Categoria">
@@ -72,17 +72,17 @@
                 <p:outputPanel id="productoPnl" class="ui-fluid">
                     <div class="field">
                         <p:outputLabel for="nombre">Nombre: </p:outputLabel>
-                        <p:inputText id="nombre" value="#{productoControlador.productoSeleccionado.nombre}"/>
+                        <p:inputText id="nombre" value="#{productoOA.productoSeleccionado.nombre}"/>
                     </div>
                     <div class="field">
                         <p:outputLabel for="precio">Precio: </p:outputLabel>
-                        <p:inputText id="precio" value="#{productoControlador.productoSeleccionado.precio}"/>
+                        <p:inputText id="precio" value="#{productoOA.productoSeleccionado.precio}"/>
                     </div>
                     <div class="field">
                         <p:outputLabel for="categoria">Categoria: </p:outputLabel>
-                        <p:selectOneMenu id="categoria" value="#{productoControlador.productoSeleccionado.categoria.id}">
+                        <p:selectOneMenu id="categoria" value="#{productoOA.productoSeleccionado.categoria.id}">
                             <f:selectItem itemLabel="Selecciona la categoria" itemValue="#{null}" noSelectionOption="true"/>
-                            <f:selectItems value="#{productoControlador.categorias}" var="cat"
+                            <f:selectItems value="#{productoOA.categorias}" var="cat"
                                            itemLabel="#{cat.nombre}" itemValue="#{cat.id}"/>
                         </p:selectOneMenu>
                     </div>
@@ -90,7 +90,7 @@
                 <f:facet name="footer">
                     <p:commandButton value="Guardar" icon="pi pi-check"
                                      process="productoPnl @this"
-                                     actionListener="#{productoControlador.guardarProducto}"/>
+                                     actionListener="#{productoOA.guardarProducto}"/>
                     <p:commandButton value="Cancelar" icon="pi pi-times"
                                      onclick="PF('productoDlg').hide()"
                                      class="ui-button-secondary" type="button"/>
@@ -103,7 +103,7 @@
                              header="Confirmar" severity="warn">
                 <p:commandButton value="Si" icon="pi pi-check"
                                  process="@this"
-                                 actionListener="#{productoControlador.eliminarProducto}"
+                                 actionListener="#{productoOA.eliminarProducto}"
                                  oncomplete="PF('eliminarProductoDlg').hide()"/>
                 <p:commandButton value="No" type="button"
                                  styleClass="ui-button-secondary"

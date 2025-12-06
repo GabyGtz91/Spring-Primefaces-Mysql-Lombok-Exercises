@@ -1,0 +1,67 @@
+package com.shoppingcart.ShoppingCart.controlador;
+
+import com.shoppingcart.ShoppingCart.modelo.Usuario;
+import com.shoppingcart.ShoppingCart.servicio.IUsuarioServicio;
+import jakarta.annotation.PostConstruct;
+import jakarta.faces.application.FacesMessage;
+import jakarta.faces.context.FacesContext;
+import jakarta.faces.view.ViewScoped;
+import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
+import org.primefaces.PrimeFaces;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+@Slf4j
+@Component
+@Data
+@ViewScoped
+public class UsuarioOA {
+    @Autowired
+    IUsuarioServicio usuarioServicio;
+
+    private Usuario usuario;
+
+    @PostConstruct
+    public void inicializar() {
+        this.usuario = new Usuario();
+    }
+
+    public void guardarUsuario() {
+        boolean existe = this.usuarioServicio.buscarUsuarioPorCorreo(this.usuario.getCorreo());
+        if(existe) {
+            mostrarMensaje("El correo ya se encuentra registrado");
+        } else {
+            this.usuarioServicio.guardarUsuario(this.usuario);
+        }
+    }
+
+    public void mostrarMensaje(String mensaje) {
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN,mensaje,mensaje));
+        PrimeFaces.current().ajax().update("usuariosFrm:mensajes");
+    }
+
+    public void limpiarFormulario() {
+        this.usuario = new Usuario();
+        PrimeFaces.current().ajax().update("usuariosFrm");
+    }
+
+    public void iniciarSesion() {
+        if (this.usuario.getCorreo().isEmpty() || this.usuario.getPassword().isEmpty()) {
+            mostrarMensaje("Indica usuario y contraseña");
+        } else {
+            boolean existe = this.usuarioServicio.buscarUsuarioCorreoPwd(this.usuario.getCorreo(), this.usuario.getPassword());
+
+            if(existe) {
+                try {
+                    FacesContext.getCurrentInstance().getExternalContext()
+                            .redirect("carrito.xhtml");
+                } catch (Exception e) {
+                    log.info("Error: " + e);
+                }
+            } else {
+                mostrarMensaje("Usuario o contraseña invalidos");
+            }
+        }
+    }
+}

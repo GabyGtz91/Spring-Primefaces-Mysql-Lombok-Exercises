@@ -1,0 +1,56 @@
+<ui:composition template="/layout.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+    <ui:define name="content">
+        <h:form id="usuariosFrm">
+            <div style="text-align: center;">
+                <p:growl id="mensajes" showDetails="true"/>
+                <h2>Registro de Nuevo Usuario</h2>
+
+                <div style="display: inline-block; text-align: left;">
+                    <h:panelGrid columns="2" cellpadding="5">
+                        <p:outputLabel for="correo">Email:</p:outputLabel>
+                        <p:inputText id="correo"
+                                     value="#{usuarioOA.usuario.correo}"
+                                     required="true"
+                                     requiredMessage="El correo es obligatorio."
+                                     validatorMessage="El correo no tiene un formato válido. Ej: usuario@dominio.com">
+                            <f:validateRegex
+                                    pattern="^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}$"/>
+                        </p:inputText>
+
+                        <h:outputLabel for="password" value="Contraseña:"/>
+                        <p:password id="password"
+                                    value="#{usuarioOA.usuario.password}"
+                                    match="password2"
+                                    required="true"
+                                    requiredMessage="La contraseña es obligatoria."
+                                    validatorMessage="Las contraseñas no coinciden."/>
+
+                        <h:outputLabel for="password2" value="Confirma tu contraseña:"/>
+                        <p:password id="password2"
+                                    required="true"
+                                    requiredMessage="Debes confirmar tu contraseña."/>
+                    </h:panelGrid>
+
+                    <div style="text-align:center; margin-top: 20px;">
+
+                        <p:commandButton value="Guardar"
+                                         update="usuariosFrm"
+                                         style="margin-right: 15px;"
+                                         actionListener="#{usuarioOA.guardarUsuario}"/>
+
+                        <p:button value="Cancelar"
+                                  outcome="/index.xhtml"
+                                  styleClass="ui-button-danger"
+                                  style="margin-left: 15px;"/>
+                    </div>
+                </div>
+            </div>
+        </h:form>
+    </ui:define>
+
+</ui:composition>

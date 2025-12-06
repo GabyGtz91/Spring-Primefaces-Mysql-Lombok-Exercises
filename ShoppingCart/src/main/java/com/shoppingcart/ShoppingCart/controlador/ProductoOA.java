@@ -4,7 +4,6 @@ import com.shoppingcart.ShoppingCart.modelo.Categoria;
 import com.shoppingcart.ShoppingCart.modelo.Producto;
 import com.shoppingcart.ShoppingCart.servicio.ICategoriaServicio;
 import com.shoppingcart.ShoppingCart.servicio.IProductoServicio;
-import com.shoppingcart.ShoppingCart.servicio.ProductoServicio;
 import jakarta.annotation.PostConstruct;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
@@ -22,7 +21,7 @@ import java.util.List;
 @Component
 @Data
 @ViewScoped
-public class ProductoControlador {
+public class ProductoOA {
     @Autowired
     IProductoServicio productoServicio;
     private List<Producto> productos;

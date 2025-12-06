@@ -19,7 +19,7 @@ import java.util.List;
 @Component
 @Data
 @ViewScoped
-public class CategoriaControlador {
+public class CategoriaOA {
     @Autowired
     ICategoriaServicio categoriaServicio;
     private List<Categoria> categorias;

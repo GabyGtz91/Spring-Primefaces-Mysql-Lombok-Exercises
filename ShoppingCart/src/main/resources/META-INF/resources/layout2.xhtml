@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<h:html xmlns:h="http://xmlns.jcp.org/jsf/html"
+        xmlns:p="http://primefaces.org/ui"
+        xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+    <h:head>
+        <title>Carrito de Compras</title>
+        <h:outputStylesheet library="css" name="estilos.css" />
+    </h:head>
+
+    <h:body>
+
+        <!-- Menú superior -->
+        <h:form id="menuFrm">
+
+            <p:growl id="growl"
+                     showDetail="true"
+                     showSummary="false"
+                     showIcon="true"/>
+
+            <p:messages id="message"
+                        showDetail="true"
+                        showSummary="false"
+                        showIcon="true"
+                        closable="true"/>
+
+            <p:menubar hideDelay="1000">
+                <p:submenu label="Catalogos" icon="pi pi-fw pi-fw pi-th-large">
+                    <p:menuitem value="Categorias" icon="pi pi-fw pi-list"
+                                outcome="categorias"/>
+                    <p:menuitem value="Productos" icon="pi pi-fw pi-tags"
+                                outcome="productos"/>
+                </p:submenu>
+            </p:menubar>
+
+        </h:form>
+
+        <h:panelGroup id="content"
+                      layout="block"
+                      style="margin-top: 20px">
+            <ui:insert name="content"/>
+        </h:panelGroup>
+
+        <style>
+            .panel-izq .ui-panel-titlebar{
+                text-align: left !important;
+            }
+            .panel-izq .ui-panel-title{
+                float: left !important;
+            }
+        </style>
+
+    </h:body>
+
+</h:html>
