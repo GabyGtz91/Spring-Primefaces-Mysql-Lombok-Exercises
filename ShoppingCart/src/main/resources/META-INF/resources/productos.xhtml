@@ -62,10 +62,18 @@
                     <p:column headerText="Categoria">
                         <h:outputText value="#{producto.categoria.nombre}"/>
                     </p:column>
+                    <p:column headerText="Imagen">
+                        <p:commandButton icon="pi pi-image"
+                                         title="Ver imagen"
+                                         process="@this"
+                                         update=":forma-modal:imagenDlg"
+                                         actionListener="#{productoOA.mostrarImagen(producto)}"
+                                         oncomplete="PF('imagenDlg').show()"/>
+                    </p:column>
                 </p:dataTable>
             </div>
         </h:form>
-        <h:form id="forma-modal">
+        <h:form id="forma-modal" enctype="multipart/form-data">
             <p:dialog header="Producto" showEffect="fade"
                       modal="true" widgetVar="productoDlg"
                       responsive="true">
@@ -85,6 +93,13 @@
                             <f:selectItems value="#{productoOA.categorias}" var="cat"
                                            itemLabel="#{cat.nombre}" itemValue="#{cat.id}"/>
                         </p:selectOneMenu>
+                    </div>
+                    <div class="field">
+                        <p:outputLabel for="imagen">Imagen: </p:outputLabel> <br/>
+                        <p:fileUpload value="#{productoOA.imagen}"
+                                      id="imagen"
+                                      mode="simple"
+                                      skinSimple="true"/>
                     </div>
                 </p:outputPanel>
                 <f:facet name="footer">
@@ -110,6 +125,18 @@
                                  icon="pi pi-times"
                                  onclick="PF('eliminarProductoDlg').hide()"/>
             </p:confirmDialog>
+            <p:dialog header="Imagen del producto"
+                      widgetVar="imagenDlg"
+                      modal="true"
+                      resizable="false"
+                      width="400">
+
+                <p:outputPanel id="imagenDlg">
+                    <p:graphicImage value="#{productoOA.rutaImagenSeleccionada}" styleClass="product-image"
+                                    style="max-width:100%; height:auto;"/>
+
+                </p:outputPanel>
+            </p:dialog>
         </h:form>
     </ui:define>
 </ui:composition>

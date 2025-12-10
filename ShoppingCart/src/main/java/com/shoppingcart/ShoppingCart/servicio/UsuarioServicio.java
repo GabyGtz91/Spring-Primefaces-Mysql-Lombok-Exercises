@@ -17,13 +17,13 @@ public class UsuarioServicio implements IUsuarioServicio {
     }
 
     @Override
-    public boolean buscarUsuarioPorCorreo(String correo) {
+    public boolean existeUsuarioPorCorreo(String correo) {
         return usuarioRepositorio.existsByCorreo(correo);
     }
 
     @Override
-    public boolean buscarUsuarioCorreoPwd(String correo, String password) {
-        return usuarioRepositorio.existsByCorreoAndPassword(correo, password);
+    public Usuario buscarUsuarioPorCorreo(String correo) {
+        return usuarioRepositorio.findUsuarioByCorreo(correo);
     }
 
 

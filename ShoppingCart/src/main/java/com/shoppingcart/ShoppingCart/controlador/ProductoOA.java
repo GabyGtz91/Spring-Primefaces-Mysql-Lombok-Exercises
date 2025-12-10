@@ -12,9 +12,16 @@ import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.primefaces.PrimeFaces;
 import org.primefaces.event.SelectEvent;
+import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.StreamedContent;
+import org.primefaces.model.file.UploadedFile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 @Slf4j
@@ -29,6 +36,11 @@ public class ProductoOA {
     @Autowired
     ICategoriaServicio categoriaServicio;
     private List<Categoria> categorias;
+    private UploadedFile imagen;
+    private static final String RUTA_FISICA_IMAGENES =
+            "C:\\GitPersonal\\images\\productos\\";
+    private static final String RUTA_WEB_IMAGENES = "productos/";
+    private String rutaImagenSeleccionada;
 
     @PostConstruct
     public void inicializar() {
@@ -56,8 +68,20 @@ public class ProductoOA {
             mostrarMensaje("Indica el precio");
         } else if (this.productoSeleccionado.getCategoria().getId() == null) {
             mostrarMensaje("Indica la categoria");
+        } else if(this.imagen == null) {
+            mostrarMensaje("Agrega una imagen para el producto");
         } else {
             if (this.productoSeleccionado.getId() == null) {
+                try {
+                    String nombreArchivo = System.currentTimeMillis() + "_" + imagen.getFileName();
+                    Path directorio = Paths.get(RUTA_FISICA_IMAGENES).resolve(nombreArchivo);
+                    Files.copy(imagen.getInputStream(), directorio);
+
+                    this.productoSeleccionado.setImagen(RUTA_WEB_IMAGENES + nombreArchivo);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
                 this.productoServicio.guardarProducto(this.productoSeleccionado);
 
                 //probar despues con el converter
@@ -100,4 +124,37 @@ public class ProductoOA {
             this.productoSeleccionado = null;
         }
     }
+
+    public void mostrarImagen(Producto producto) {
+        if (producto != null) {
+            this.rutaImagenSeleccionada = producto.getImagen();
+        }
+    }
+
+    /*public StreamedContent getImagenSeleccionada() {
+        if (this.rutaImagenSeleccionada == null) {
+            return null;
+        }
+
+        try {
+            Path path = Paths.get(this.rutaImagenSeleccionada);
+
+
+            String contentType = Files.probeContentType(path);
+            if (contentType == null) {
+                contentType = "application/octet-stream"; // fallback
+            }
+
+            InputStream is = Files.newInputStream(path);
+
+            return  DefaultStreamedContent.builder()
+                    .stream(() -> is)
+                    .contentType(contentType)
+                    .build();
+
+        } catch (Exception e) {
+            return  null;
+        }
+    }*/
 }
+
