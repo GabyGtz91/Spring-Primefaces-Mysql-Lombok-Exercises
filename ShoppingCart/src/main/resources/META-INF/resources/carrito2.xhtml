@@ -1,0 +1,153 @@
+<ui:composition template="/layout.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+    <ui:define name="content">
+        <style>
+            .product-grid-item {
+                margin: 0.5rem;
+                border: 1px solid var(--surface-d);
+                padding: 1rem;
+                border-radius: 4px;
+            }
+
+            .product-grid-item-top,
+            .product-grid-item-bottom {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+            }
+
+            .product-grid-item .product-category-icon {
+                vertical-align: middle;
+                margin-right: .5rem;
+            }
+
+            .product-grid-item .product-category {
+                font-weight: 600;
+                vertical-align: middle;
+            }
+
+            .product-grid-item .product-name {
+                font-size: 1.5rem;
+                font-weight: 700;
+            }
+
+            .product-grid-item .product-description {
+                margin: 0 0 1rem 0;
+            }
+
+            .product-grid-item .product-price {
+                font-size: 1.5rem;
+                font-weight: 600;
+            }
+
+            .product-grid-item .product-grid-item-content {
+                text-align: center;
+            }
+
+            .product-badge {
+    padding: 0.25rem 0.5rem;
+    border-radius: 2px;
+    font-weight: 700;
+    font-size: 0.75rem;
+}
+
+.status-instock {
+    background: #c8e6c9;
+    color: #256029;
+}
+
+.status-lowstock {
+    background: #feedaf;
+    color: #8a5340;
+}
+
+.status-outofstock {
+    background: #ffcdd2;
+    color: #c63737;
+}
+
+            .ui-rating .ui-rating-star-on a {
+    color: var(--primary-color);
+}
+
+            .product-grid-item img {
+    width: 100%;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16);
+}
+</style>
+
+        <div class="card product">
+            <h:form id="form">
+                <p:dataView var="producto" value="#{carritoOA.productos}" rows="12" paginator="true"
+                            rowsPerPageTemplate="6,12,16"
+                            paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                            gridIcon="pi pi-th-large" listIcon="pi pi-bars">
+
+                    <p:dataViewGridItem>
+                        <div class="product-grid-item card border-1">
+                            <div class="product-grid-item-top">
+                                <div>
+                                    <i class="pi pi-tag product-category-icon"/>
+                                    <span class="product-category">#{producto.categoria.nombre}</span>
+                                </div>
+                                <span class="product-badge status-instock">IN STOCK</span>
+                            </div>
+                            <div class="product-grid-item-content">
+                                <p:graphicImage value="#{producto.imagen}"
+                                                styleClass="product-image"
+                                                style="width:200px; height:200px"/>
+                                <div class="product-name">#{producto.nombre}</div>
+                                <div class="product-description">Descripcion</div>
+                                <p:rating readonly="true" value="4"/>
+                            </div>
+                            <div class="product-grid-item-bottom">
+                                <h:outputText value="#{producto.precio}" styleClass="product-price">
+                                    <f:convertNumber currencySymbol="$" type="currency"/>
+                                </h:outputText>
+                                <p:commandButton type="button"
+                                                 value="Add To Cart"
+                                                 icon="pi pi-shopping-cart">
+                                </p:commandButton>
+                            </div>
+                        </div>
+                    </p:dataViewGridItem>
+
+                    <p:dataViewListItem>
+                        <div class="product-list-item">
+                            <p:graphicImage value="#{producto.imagen}"
+                                            styleClass="product-image"
+                                            style="width:200px; height:200px"/>
+                            <div class="product-list-detail">
+                                <div class="product-name">#{producto.nombre}</div>
+                                <div class="product-description">Descripcion</div>
+                                <p:rating readonly="true" value="4"/>
+                                <i class="pi pi-tag product-category-icon"/><span
+                                    class="product-category">#{producto.categoria.nombre}</span>
+                            </div>
+                            <div class="product-list-action">
+                                <h:outputText value="#{producto.precio}" styleClass="product-price">
+                                    <f:convertNumber currencySymbol="$" type="currency"/>
+                                </h:outputText>
+                                <p:commandButton type="button"
+                                                 value="Add To Cart"
+                                                 icon="pi pi-shopping-cart">
+                                </p:commandButton>
+                                <span class="product-badge status-instock">IN STOCK</span>
+                            </div>
+                        </div>
+                    </p:dataViewListItem>
+                </p:dataView>
+            </h:form>
+        </div>
+    </ui:define>
+
+</ui:composition>
+
+
+
+
+

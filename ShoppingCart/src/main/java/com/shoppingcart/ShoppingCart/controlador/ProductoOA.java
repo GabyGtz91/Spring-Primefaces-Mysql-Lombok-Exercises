@@ -12,13 +12,9 @@ import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.primefaces.PrimeFaces;
 import org.primefaces.event.SelectEvent;
-import org.primefaces.model.DefaultStreamedContent;
-import org.primefaces.model.StreamedContent;
 import org.primefaces.model.file.UploadedFile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -38,7 +34,7 @@ public class ProductoOA {
     private List<Categoria> categorias;
     private UploadedFile imagen;
     private static final String RUTA_FISICA_IMAGENES =
-            "C:\\GitPersonal\\images\\productos\\";
+            "C:\\GitPersonal\\images\\";
     private static final String RUTA_WEB_IMAGENES = "productos/";
     private String rutaImagenSeleccionada;
 
@@ -48,7 +44,7 @@ public class ProductoOA {
     }
 
     public void cargarProductos() {
-        this.productos = productoServicio.listarProductos();
+        this.productos = this.productoServicio.listarProductos();
     }
 
     public void agregarProducto() {
@@ -72,16 +68,7 @@ public class ProductoOA {
             mostrarMensaje("Agrega una imagen para el producto");
         } else {
             if (this.productoSeleccionado.getId() == null) {
-                try {
-                    String nombreArchivo = System.currentTimeMillis() + "_" + imagen.getFileName();
-                    Path directorio = Paths.get(RUTA_FISICA_IMAGENES).resolve(nombreArchivo);
-                    Files.copy(imagen.getInputStream(), directorio);
-
-                    this.productoSeleccionado.setImagen(RUTA_WEB_IMAGENES + nombreArchivo);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
+                guardarImagen();
                 this.productoServicio.guardarProducto(this.productoSeleccionado);
 
                 //probar despues con el converter
@@ -91,6 +78,8 @@ public class ProductoOA {
 
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Producto agregado"));
             } else {
+                eliminarImagen();
+                guardarImagen();
                 this.productoServicio.guardarProducto(this.productoSeleccionado);
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Producto Actualizado"));
 
@@ -117,6 +106,9 @@ public class ProductoOA {
 
     public void eliminarProducto() {
         if(this.productoSeleccionado.getId() != null) {
+            if(productoSeleccionado.getImagen() != null) {
+                eliminarImagen();
+            }
             this.productoServicio.eliminarProducto(this.productoSeleccionado);
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Producto Eliminado"));
             this.productos.remove(this.productoSeleccionado);
@@ -131,30 +123,32 @@ public class ProductoOA {
         }
     }
 
-    /*public StreamedContent getImagenSeleccionada() {
-        if (this.rutaImagenSeleccionada == null) {
-            return null;
+    public void eliminarImagen() {
+        if (this.productoSeleccionado == null) {
+            return;
         }
 
         try {
-            Path path = Paths.get(this.rutaImagenSeleccionada);
+            Path path = Paths.get(RUTA_FISICA_IMAGENES).resolve(this.productoSeleccionado.getImagen());
 
-
-            String contentType = Files.probeContentType(path);
-            if (contentType == null) {
-                contentType = "application/octet-stream"; // fallback
+            if (Files.exists(path)) {
+                Files.delete(path);
             }
-
-            InputStream is = Files.newInputStream(path);
-
-            return  DefaultStreamedContent.builder()
-                    .stream(() -> is)
-                    .contentType(contentType)
-                    .build();
-
         } catch (Exception e) {
-            return  null;
+            log.error("Error eliminando imagen ", e);
         }
-    }*/
+    }
+
+    public void guardarImagen() {
+        try {
+            String nombreArchivo = System.currentTimeMillis() + "_" + imagen.getFileName();
+            Path directorio = Paths.get(RUTA_FISICA_IMAGENES+RUTA_WEB_IMAGENES).resolve(nombreArchivo);
+            Files.copy(imagen.getInputStream(), directorio);
+
+            this.productoSeleccionado.setImagen(RUTA_WEB_IMAGENES + nombreArchivo);
+        } catch (Exception e) {
+            log.error("Error eliminando imagen ", e);
+        }
+    }
 }
 
