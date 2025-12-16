@@ -60,7 +60,7 @@ public class UsuarioOA {
                 if(checkPassword(this.usuario.getPassword(), userBD.getPassword())) {
                     try {
                         FacesContext.getCurrentInstance().getExternalContext()
-                                .redirect("carrito.xhtml");
+                                .redirect("carrito2.xhtml");
                     } catch (Exception e) {
                         log.info("Error: " + e);
                     }

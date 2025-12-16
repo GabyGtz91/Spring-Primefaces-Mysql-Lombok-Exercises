@@ -37,6 +37,7 @@ public class ProductoOA {
             "C:\\GitPersonal\\images\\";
     private static final String RUTA_WEB_IMAGENES = "productos/";
     private String rutaImagenSeleccionada;
+    private boolean soloLectura;
 
     @PostConstruct
     public void inicializar() {
@@ -49,6 +50,7 @@ public class ProductoOA {
 
     public void agregarProducto() {
         this.productoSeleccionado = new Producto();
+        this.soloLectura = false;
         this.productoSeleccionado.setCategoria(new Categoria());
         listarCategorias();
     }
@@ -64,9 +66,9 @@ public class ProductoOA {
             mostrarMensaje("Indica el precio");
         } else if (this.productoSeleccionado.getCategoria().getId() == null) {
             mostrarMensaje("Indica la categoria");
-        } else if(this.imagen == null) {
+        } /*else if(this.imagen == null) {
             mostrarMensaje("Agrega una imagen para el producto");
-        } else {
+        }*/ else {
             if (this.productoSeleccionado.getId() == null) {
                 guardarImagen();
                 this.productoServicio.guardarProducto(this.productoSeleccionado);
@@ -78,8 +80,11 @@ public class ProductoOA {
 
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Producto agregado"));
             } else {
-                eliminarImagen();
-                guardarImagen();
+                if(this.imagen != null) {
+                    eliminarImagen();
+                    guardarImagen();
+                }
+
                 this.productoServicio.guardarProducto(this.productoSeleccionado);
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Producto Actualizado"));
 
@@ -149,6 +154,14 @@ public class ProductoOA {
         } catch (Exception e) {
             log.error("Error eliminando imagen ", e);
         }
+    }
+
+    public void editarProducto(){
+        this.soloLectura = false;
+    }
+
+    public void verProducto() {
+        this.soloLectura = true;
     }
 }
 

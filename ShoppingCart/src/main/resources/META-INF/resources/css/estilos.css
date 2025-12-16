@@ -67,7 +67,7 @@ body {
 
 /* Creación de espacio visual */
 #content {
-    max-width: 500px;
+    max-width: 1200px;
     margin: 40px auto;
     padding: 20px;
 }

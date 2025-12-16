@@ -8,33 +8,39 @@
         <h:form id="productosFrm">
             <p:growl id="mensajes" showDetails="true"/>
             <!-- DataTable   -->
-            <div class="card">
+            <div style="width: 600px">
                 <p:toolbar id="tool-bar">
                     <p:toolbarGroup>
                         <p:commandButton value="Agregar"
                                          icon="pi pi-plus"
                                          actionListener="#{productoOA.agregarProducto}"
-                                         update=":forma-modal:productoPnl"
+                                         update=":forma-modal"
                                          oncomplete="PF('productoDlg').show()"
                                          styleClass="ui-button-success"
-                                         style="margin-right: .5rem">
-                        </p:commandButton>
+                                         style="margin-right: .5rem"/>
                         <p:commandButton value="Editar"
                                          icon="pi pi-pencil"
-                                         update=":forma-modal:productoPnl"
+                                         update=":forma-modal"
+                                         actionListener="#{productoOA.editarProducto}"
                                          disabled="#{empty productoOA.productoSeleccionado}"
                                          oncomplete="PF('productoDlg').show()"
                                          styleClass="ui-button-info"
-                                         style="margin-right: .5rem">
-                        </p:commandButton>
+                                         style="margin-right: .5rem"/>
                         <p:commandButton value="Eliminar"
                                          icon="pi pi-trash"
                                          process="@this"
                                          disabled="#{empty productoOA.productoSeleccionado}"
                                          update=":forma-modal:eliminarProductoDlg"
                                          oncomplete="PF('eliminarProductoDlg').show()"
-                                         styleClass="ui-button-danger" style="margin-right: .5rem">
-                        </p:commandButton>
+                                         styleClass="ui-button-danger" style="margin-right: .5rem"/>
+                        <p:commandButton value="Ver detalle"
+                                         icon="pi pi-search"
+                                         update=":forma-modal"
+                                         actionListener="#{productoOA.verProducto}"
+                                         disabled="#{empty productoOA.productoSeleccionado}"
+                                         oncomplete="PF('productoDlg').show()"
+                                         styleClass="ui-button-secondary"
+                                         style="margin-right: .5rem"/>
                     </p:toolbarGroup>
                 </p:toolbar>
                 <p:dataTable value="#{productoOA.productos}"
@@ -80,34 +86,50 @@
                 <p:outputPanel id="productoPnl" class="ui-fluid">
                     <div class="field">
                         <p:outputLabel for="nombre">Nombre: </p:outputLabel>
-                        <p:inputText id="nombre" value="#{productoOA.productoSeleccionado.nombre}"/>
+                        <p:inputText id="nombre" value="#{productoOA.productoSeleccionado.nombre}" disabled="#{productoOA.soloLectura}"/>
                     </div>
                     <div class="field">
                         <p:outputLabel for="precio">Precio: </p:outputLabel>
-                        <p:inputText id="precio" value="#{productoOA.productoSeleccionado.precio}"/>
+                        <p:inputText id="precio" value="#{productoOA.productoSeleccionado.precio}" disabled="#{productoOA.soloLectura}"/>
                     </div>
                     <div class="field">
                         <p:outputLabel for="categoria">Categoria: </p:outputLabel>
-                        <p:selectOneMenu id="categoria" value="#{productoOA.productoSeleccionado.categoria.id}">
+                        <p:selectOneMenu id="categoria" value="#{productoOA.productoSeleccionado.categoria.id}" disabled="#{productoOA.soloLectura}">
                             <f:selectItem itemLabel="Selecciona la categoria" itemValue="#{null}" noSelectionOption="true"/>
                             <f:selectItems value="#{productoOA.categorias}" var="cat"
                                            itemLabel="#{cat.nombre}" itemValue="#{cat.id}"/>
                         </p:selectOneMenu>
                     </div>
                     <div class="field">
+                        <p:outputLabel for="descripcion">Descripcion: </p:outputLabel> <br/>
+                        <p:inputTextarea rows="5" cols="30" autoResize="false" id="descripcion"
+                                         value="#{productoOA.productoSeleccionado.descripcion}"
+                                         disabled="#{productoOA.soloLectura}"/>
+                    </div>
+                    <div class="field">
                         <p:outputLabel for="imagen">Imagen: </p:outputLabel> <br/>
                         <p:fileUpload value="#{productoOA.imagen}"
                                       id="imagen"
+                                      rendered="#{!productoOA.soloLectura}"
                                       mode="simple"
                                       skinSimple="true"/>
+                        <p:graphicImage value="#{productoOA.productoSeleccionado.imagen}" styleClass="product-image"
+                                        style="width:100px; height:100px; align:center;"
+                                        rendered="#{productoOA.soloLectura}"/>
                     </div>
                 </p:outputPanel>
                 <f:facet name="footer">
                     <p:commandButton value="Guardar" icon="pi pi-check"
                                      process="productoPnl @this"
+                                     rendered="#{!productoOA.soloLectura}"
                                      actionListener="#{productoOA.guardarProducto}"/>
                     <p:commandButton value="Cancelar" icon="pi pi-times"
                                      onclick="PF('productoDlg').hide()"
+                                     rendered="#{!productoOA.soloLectura}"
+                                     class="ui-button-secondary" type="button"/>
+                    <p:commandButton value="Cerrar" icon="pi pi-times"
+                                     onclick="PF('productoDlg').hide()"
+                                     rendered="#{productoOA.soloLectura}"
                                      class="ui-button-secondary" type="button"/>
                 </f:facet>
             </p:dialog>
